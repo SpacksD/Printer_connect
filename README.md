@@ -1,0 +1,2 @@
+# Printer_connect
+Sistema para Cliente / Servidor  de servidores de impresión en red local, el cliente instalara una impresora virtual en la maquina cliente (Windows), y el servidor recibirá tanto los archivos (paginas) a imprimir, así como los parámetros (tamaño hoja, márgenes, orientación), y en un archivo de los guardara las impresiones realizadas, el servidor estara instalado en la maquina conectada a la impresora y servira como puente, evitando problemas de configuracion de impresoras en entornos windows con uso dominio
