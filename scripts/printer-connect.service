@@ -1,0 +1,27 @@
+[Unit]
+Description=Printer_connect Server
+After=network.target
+
+[Service]
+Type=simple
+User=printer-connect
+Group=printer-connect
+WorkingDirectory=/opt/printer-connect
+Environment="PATH=/opt/printer-connect/venv/bin"
+ExecStart=/opt/printer-connect/venv/bin/python server/main_v4.py
+Restart=always
+RestartSec=10
+
+# Logging
+StandardOutput=append:/var/log/printer-connect/server.log
+StandardError=append:/var/log/printer-connect/server-error.log
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/printer-connect /var/log/printer-connect
+
+[Install]
+WantedBy=multi-user.target
