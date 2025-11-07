@@ -1,0 +1,59 @@
+# Printer_connect - Servidor
+# Python 3.10+
+
+# Framework web (opcional para API REST)
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# Base de datos
+sqlalchemy>=2.0.23
+alembic>=1.13.0
+aiosqlite>=0.19.0
+
+# Validación de datos
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# Interfaz con impresora
+# Windows
+pywin32>=306  # Para Windows
+
+# Linux (descomentar si se usa Linux)
+# pycups>=2.0.1
+
+# Procesamiento de archivos
+pypdf>=3.17.0
+pdf2image>=1.16.3
+pillow>=10.1.0
+
+# Comunicación asíncrona
+aiofiles>=23.2.1
+websockets>=12.0
+
+# Seguridad
+cryptography>=41.0.7
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+
+# Configuración
+python-dotenv>=1.0.0
+pyyaml>=6.0.1
+
+# Logging
+loguru>=0.7.2
+
+# Utilidades
+python-dateutil>=2.8.2
+
+# Monitoreo (opcional)
+prometheus-client>=0.19.0
+
+# Desarrollo y testing
+pytest>=7.4.3
+pytest-asyncio>=0.21.1
+pytest-cov>=4.1.0
+httpx>=0.25.2  # Para tests de API
+black>=23.12.0
+flake8>=6.1.0
+mypy>=1.7.1
