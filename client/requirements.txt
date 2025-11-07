@@ -21,6 +21,7 @@ msgpack>=1.0.7
 
 # Seguridad
 cryptography>=41.0.7
+pyjwt>=2.8.0
 
 # Configuración
 python-dotenv>=1.0.0

@@ -6,11 +6,25 @@ port = 9100
 # Timeout de conexión (segundos)
 connection_timeout = 30
 
+[Security]
+# Habilitar TLS/SSL
+tls_enabled = true
+cert_dir = certs
+# certfile = client.crt  # Opcional, para autenticación mutua
+# keyfile = client.key   # Opcional, para autenticación mutua
+cafile = server.crt      # Certificado del servidor para verificación
+
+# Verificación del servidor
+verify_server = true
+
 [Authentication]
 # Credenciales de autenticación
 username = usuario
 # La contraseña se pedirá en la primera ejecución o se guardará cifrada
 # password =
+
+# Token JWT (se obtiene automáticamente al autenticar)
+# auth_token =
 
 [Client]
 # Identificador único del cliente (se genera automáticamente si no existe)

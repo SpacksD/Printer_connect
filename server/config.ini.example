@@ -12,18 +12,37 @@ api_port = 8080
 
 [Security]
 # Habilitar TLS/SSL
-enable_ssl = false
-ssl_cert_file = /path/to/cert.pem
-ssl_key_file = /path/to/key.pem
+tls_enabled = true
+cert_dir = certs
+certfile = server.crt
+keyfile = server.key
+# cafile = ca.crt  # Opcional, para verificar clientes
 
-# Habilitar autenticación
+# Verificación de certificados
+require_client_cert = false
+verify_server_cert = true
+
+# Habilitar autenticación JWT
 require_authentication = true
 
-# Secret key para JWT (cambiar en producción)
+# Secret key para JWT (cambiar en producción!)
+# Genera una con: python -c "import secrets; print(secrets.token_urlsafe(32))"
 jwt_secret_key = CHANGE_THIS_SECRET_KEY_IN_PRODUCTION
 
-# Duración del token (en minutos)
-jwt_expiration_minutes = 1440
+# Duración del token (en horas)
+token_expiration_hours = 24
+
+# Rate limiting
+enable_rate_limiting = true
+requests_per_minute = 60
+
+# Validación de inputs
+max_file_size_mb = 100
+allowed_file_extensions = .pdf,.ps
+
+# Logs de auditoría
+enable_audit_logs = true
+audit_log_file = /var/log/printer_connect/audit.log
 
 [Database]
 # Tipo: sqlite, postgresql
