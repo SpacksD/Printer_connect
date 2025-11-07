@@ -187,3 +187,59 @@ class ServerStats(Base):
             'avg_processing_time_ms': self.avg_processing_time_ms,
             'uptime_seconds': self.uptime_seconds
         }
+
+
+class User(Base):
+    """Modelo de usuario del sistema"""
+    __tablename__ = 'users'
+
+    # Identificación
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String(50), unique=True, nullable=False, index=True)
+    email = Column(String(100), unique=True, nullable=True, index=True)
+
+    # Autenticación
+    password_hash = Column(String(255), nullable=False)
+    password_salt = Column(String(255), nullable=False)
+
+    # Información
+    full_name = Column(String(100))
+    role = Column(String(20), default='user', index=True)  # admin, user, viewer
+
+    # Estado
+    is_active = Column(Boolean, default=True, index=True)
+    is_verified = Column(Boolean, default=False)
+
+    # Timestamps
+    created_at = Column(DateTime, default=datetime.utcnow)
+    last_login = Column(DateTime)
+    last_activity = Column(DateTime)
+
+    # Configuración
+    preferences = Column(Text)  # JSON con preferencias del usuario
+
+    # Índices compuestos
+    __table_args__ = (
+        Index('idx_user_active_role', 'is_active', 'role'),
+    )
+
+    def to_dict(self, include_sensitive=False) -> dict:
+        """Convierte el usuario a diccionario"""
+        data = {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'full_name': self.full_name,
+            'role': self.role,
+            'is_active': self.is_active,
+            'is_verified': self.is_verified,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'last_login': self.last_login.isoformat() if self.last_login else None,
+            'last_activity': self.last_activity.isoformat() if self.last_activity else None,
+        }
+
+        if include_sensitive:
+            data['password_hash'] = self.password_hash
+            data['password_salt'] = self.password_salt
+
+        return data

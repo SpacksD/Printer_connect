@@ -12,7 +12,7 @@ from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.exc import SQLAlchemyError
 
-from server.database.models import Base, PrintJob, Client, ServerStats
+from server.database.models import Base, PrintJob, Client, ServerStats, User
 
 
 class Database:
@@ -374,3 +374,216 @@ class Database:
 
             self.logger.info(f"Eliminados {deleted} trabajos antiguos")
             return deleted
+
+    # ========================================================================
+    # Gestión de Usuarios
+    # ========================================================================
+
+    def create_user(
+        self,
+        username: str,
+        password_hash: str,
+        password_salt: str,
+        email: Optional[str] = None,
+        full_name: Optional[str] = None,
+        role: str = 'user'
+    ) -> User:
+        """
+        Crea un nuevo usuario
+
+        Args:
+            username: Nombre de usuario
+            password_hash: Hash de la contraseña
+            password_salt: Salt de la contraseña
+            email: Email (opcional)
+            full_name: Nombre completo (opcional)
+            role: Rol del usuario (admin, user, viewer)
+
+        Returns:
+            Usuario creado
+        """
+        with self.get_session() as session:
+            user = User(
+                username=username,
+                password_hash=password_hash,
+                password_salt=password_salt,
+                email=email,
+                full_name=full_name,
+                role=role
+            )
+
+            session.add(user)
+            session.commit()
+            session.refresh(user)
+
+            self.logger.info(f"Usuario creado: {username} (role={role})")
+            return user
+
+    def get_user_by_username(self, username: str) -> Optional[User]:
+        """Obtiene un usuario por su username"""
+        with self.get_session() as session:
+            return session.query(User).filter(
+                User.username == username
+            ).first()
+
+    def get_user_by_id(self, user_id: int) -> Optional[User]:
+        """Obtiene un usuario por su ID"""
+        with self.get_session() as session:
+            return session.query(User).filter(
+                User.id == user_id
+            ).first()
+
+    def get_user_by_email(self, email: str) -> Optional[User]:
+        """Obtiene un usuario por su email"""
+        with self.get_session() as session:
+            return session.query(User).filter(
+                User.email == email
+            ).first()
+
+    def get_all_users(self, active_only: bool = False) -> List[User]:
+        """
+        Obtiene todos los usuarios
+
+        Args:
+            active_only: Solo usuarios activos
+
+        Returns:
+            Lista de usuarios
+        """
+        with self.get_session() as session:
+            query = session.query(User)
+
+            if active_only:
+                query = query.filter(User.is_active == True)
+
+            return query.order_by(User.username).all()
+
+    def update_user(
+        self,
+        user_id: int,
+        email: Optional[str] = None,
+        full_name: Optional[str] = None,
+        role: Optional[str] = None,
+        is_active: Optional[bool] = None,
+        is_verified: Optional[bool] = None
+    ) -> Optional[User]:
+        """
+        Actualiza un usuario
+
+        Args:
+            user_id: ID del usuario
+            email: Nuevo email (opcional)
+            full_name: Nuevo nombre completo (opcional)
+            role: Nuevo rol (opcional)
+            is_active: Nuevo estado activo (opcional)
+            is_verified: Nuevo estado verificado (opcional)
+
+        Returns:
+            Usuario actualizado o None si no existe
+        """
+        with self.get_session() as session:
+            user = session.query(User).filter(User.id == user_id).first()
+
+            if not user:
+                return None
+
+            if email is not None:
+                user.email = email
+            if full_name is not None:
+                user.full_name = full_name
+            if role is not None:
+                user.role = role
+            if is_active is not None:
+                user.is_active = is_active
+            if is_verified is not None:
+                user.is_verified = is_verified
+
+            session.commit()
+            session.refresh(user)
+
+            self.logger.info(f"Usuario actualizado: {user.username}")
+            return user
+
+    def update_user_password(
+        self,
+        user_id: int,
+        password_hash: str,
+        password_salt: str
+    ) -> bool:
+        """
+        Actualiza la contraseña de un usuario
+
+        Args:
+            user_id: ID del usuario
+            password_hash: Nuevo hash de contraseña
+            password_salt: Nuevo salt
+
+        Returns:
+            True si se actualizó, False si no
+        """
+        with self.get_session() as session:
+            user = session.query(User).filter(User.id == user_id).first()
+
+            if not user:
+                return False
+
+            user.password_hash = password_hash
+            user.password_salt = password_salt
+
+            session.commit()
+
+            self.logger.info(f"Contraseña actualizada para: {user.username}")
+            return True
+
+    def update_user_last_login(self, user_id: int):
+        """Actualiza el timestamp de último login"""
+        with self.get_session() as session:
+            user = session.query(User).filter(User.id == user_id).first()
+
+            if user:
+                user.last_login = datetime.utcnow()
+                session.commit()
+
+    def update_user_last_activity(self, user_id: int):
+        """Actualiza el timestamp de última actividad"""
+        with self.get_session() as session:
+            user = session.query(User).filter(User.id == user_id).first()
+
+            if user:
+                user.last_activity = datetime.utcnow()
+                session.commit()
+
+    def delete_user(self, user_id: int) -> bool:
+        """
+        Elimina un usuario
+
+        Args:
+            user_id: ID del usuario
+
+        Returns:
+            True si se eliminó, False si no
+        """
+        with self.get_session() as session:
+            user = session.query(User).filter(User.id == user_id).first()
+
+            if not user:
+                return False
+
+            username = user.username
+            session.delete(user)
+            session.commit()
+
+            self.logger.info(f"Usuario eliminado: {username}")
+            return True
+
+    def get_users_by_role(self, role: str) -> List[User]:
+        """Obtiene todos los usuarios con un rol específico"""
+        with self.get_session() as session:
+            return session.query(User).filter(
+                User.role == role,
+                User.is_active == True
+            ).all()
+
+
+# Alias para compatibilidad
+DatabaseManager = Database
