@@ -33,6 +33,9 @@ loguru>=0.7.2
 pathlib>=1.0.1
 python-dateutil>=2.8.2
 
+# Monitoreo de archivos (Fase 2)
+watchdog>=3.0.0
+
 # Desarrollo y testing
 pytest>=7.4.3
 pytest-cov>=4.1.0

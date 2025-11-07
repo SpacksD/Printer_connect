@@ -5,8 +5,9 @@ Sistema Cliente/Servidor de impresión en red local que soluciona problemas de c
 ## Estado del Proyecto
 
 🟢 **Fase 1 (MVP) - COMPLETADO** ✅
+🟢 **Fase 2 (Impresora Virtual) - COMPLETADO** ✅
 
-El sistema cuenta con comunicación básica cliente-servidor funcional.
+El sistema captura trabajos de impresión, los convierte a PDF y los envía automáticamente al servidor.
 
 ## Descripción
 
@@ -91,7 +92,9 @@ python scripts/test_phase1.py
 - 📖 [**Análisis Completo y Sugerencias**](ANALISIS_Y_SUGERENCIAS.md) - Análisis exhaustivo del proyecto
 - 🚀 [**Guía de Inicio Rápido**](QUICKSTART.md) - Para desarrolladores
 - 🗺️ [**Roadmap**](docs/ROADMAP.md) - Plan de desarrollo completo
-- ✅ [**Fase 1 - MVP**](docs/FASE1_MVP.md) - Documentación de la fase actual
+- ✅ [**Fase 1 - MVP**](docs/FASE1_MVP.md) - Comunicación cliente-servidor
+- ✅ [**Fase 2 - Impresora Virtual**](docs/FASE2_IMPRESORA_VIRTUAL.md) - Captura de impresiones (ACTUAL)
+- 🔬 [**Investigación Impresora Virtual**](docs/INVESTIGACION_IMPRESORA_VIRTUAL.md) - Análisis técnico
 
 ---
 
@@ -157,8 +160,9 @@ Printer_connect/
 
 ---
 
-## Características Implementadas (Fase 1)
+## Características Implementadas
 
+### Fase 1 - MVP
 ✅ Servidor TCP/IP multi-threaded
 ✅ Cliente TCP/IP con envío de archivos
 ✅ Protocolo de comunicación JSON
@@ -168,13 +172,23 @@ Printer_connect/
 ✅ Tests unitarios
 ✅ Manejo de errores
 
+### Fase 2 - Impresora Virtual
+✅ Captura de trabajos de impresión en Windows
+✅ Conversión PostScript → PDF (GhostScript)
+✅ Extracción automática de parámetros
+✅ Monitoreo de carpeta (watchdog)
+✅ Envío automático al servidor
+✅ Script de instalación PowerShell
+✅ Mock converter para testing sin GhostScript
+
 ---
 
 ## Próximos Pasos
 
-1. **Fase 2**: Implementar impresora virtual en Windows
-2. Integrar GhostScript para conversión de formatos
-3. Captura automática de trabajos de impresión
+1. **Fase 3**: Cola de impresión en el servidor
+2. Integrar con impresora física (win32print/CUPS)
+3. Base de datos para registro de trabajos
+4. Reportes y estadísticas
 
 ---
 
@@ -205,5 +219,6 @@ Lee la [Guía de Inicio Rápido](QUICKSTART.md) para configurar el entorno de de
 
 ---
 
-**Versión Actual**: 0.1.0 (MVP)
-**Estado**: Fase 1 Completada ✅
+**Versión Actual**: 0.2.0
+**Estado**: Fase 2 Completada ✅
+**Características**: Impresora virtual funcional con captura y envío automático
