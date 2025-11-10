@@ -1,0 +1,74 @@
+[Server]
+# Dirección IP o hostname del servidor de impresión
+host = 192.168.1.100
+port = 9100
+
+# Timeout de conexión (segundos)
+connection_timeout = 30
+
+[Security]
+# Habilitar TLS/SSL
+tls_enabled = true
+cert_dir = certs
+# certfile = client.crt  # Opcional, para autenticación mutua
+# keyfile = client.key   # Opcional, para autenticación mutua
+cafile = server.crt      # Certificado del servidor para verificación
+
+# Verificación del servidor
+verify_server = true
+
+[Authentication]
+# Credenciales de autenticación
+username = usuario
+# La contraseña se pedirá en la primera ejecución o se guardará cifrada
+# password =
+
+# Token JWT (se obtiene automáticamente al autenticar)
+# auth_token =
+
+[Client]
+# Identificador único del cliente (se genera automáticamente si no existe)
+client_id =
+
+# Nombre de la impresora virtual
+printer_name = Printer_connect
+
+# Carpeta temporal para archivos de impresión
+temp_folder = C:\ProgramData\Printer_connect\temp
+
+# Carpeta para cola local (cuando servidor no disponible)
+queue_folder = C:\ProgramData\Printer_connect\queue
+
+[Printing]
+# Valores por defecto
+default_page_size = A4
+default_orientation = portrait
+default_color = true
+default_duplex = false
+default_quality = normal
+
+# Compresión de archivos antes de enviar
+enable_compression = true
+
+[Logging]
+# Nivel de log: DEBUG, INFO, WARNING, ERROR, CRITICAL
+log_level = INFO
+
+# Ubicación del archivo de log
+log_file = C:\ProgramData\Printer_connect\client.log
+
+# Rotación de logs (tamaño en MB)
+log_rotation_size = 10
+
+# Cantidad de archivos de log a mantener
+log_retention_count = 5
+
+[UI]
+# Mostrar notificaciones en bandeja del sistema
+show_notifications = true
+
+# Minimizar a bandeja del sistema al cerrar
+minimize_to_tray = true
+
+# Inicio automático con Windows
+start_with_windows = true

@@ -1,0 +1,107 @@
+[Server]
+# Dirección IP para escuchar (0.0.0.0 = todas las interfaces)
+host = 0.0.0.0
+port = 9100
+
+# Número máximo de conexiones simultáneas
+max_connections = 50
+
+# Habilitar API REST
+enable_rest_api = true
+api_port = 8080
+
+[Security]
+# Habilitar TLS/SSL
+tls_enabled = true
+cert_dir = certs
+certfile = server.crt
+keyfile = server.key
+# cafile = ca.crt  # Opcional, para verificar clientes
+
+# Verificación de certificados
+require_client_cert = false
+verify_server_cert = true
+
+# Habilitar autenticación JWT
+require_authentication = true
+
+# Secret key para JWT (cambiar en producción!)
+# Genera una con: python -c "import secrets; print(secrets.token_urlsafe(32))"
+jwt_secret_key = CHANGE_THIS_SECRET_KEY_IN_PRODUCTION
+
+# Duración del token (en horas)
+token_expiration_hours = 24
+
+# Rate limiting
+enable_rate_limiting = true
+requests_per_minute = 60
+
+# Validación de inputs
+max_file_size_mb = 100
+allowed_file_extensions = .pdf,.ps
+
+# Logs de auditoría
+enable_audit_logs = true
+audit_log_file = /var/log/printer_connect/audit.log
+
+[Database]
+# Tipo: sqlite, postgresql
+db_type = sqlite
+
+# Para SQLite
+sqlite_file = /var/lib/printer_connect/database.db
+
+# Para PostgreSQL (descomentar si se usa)
+# postgresql_host = localhost
+# postgresql_port = 5432
+# postgresql_database = printer_connect
+# postgresql_user = printer_user
+# postgresql_password = CHANGE_THIS_PASSWORD
+
+[Printer]
+# Nombre de la impresora física conectada al servidor
+printer_name = HP LaserJet Pro
+
+# Carpeta temporal para archivos recibidos
+temp_folder = /var/lib/printer_connect/temp
+
+# Carpeta para archivos procesados (histórico)
+archive_folder = /var/lib/printer_connect/archive
+
+# Días para mantener archivos en archivo (0 = indefinido)
+archive_retention_days = 30
+
+# Procesamiento de cola
+queue_check_interval = 2
+
+# Reintentos automáticos en caso de error
+max_print_retries = 3
+
+[Logging]
+# Nivel de log: DEBUG, INFO, WARNING, ERROR, CRITICAL
+log_level = INFO
+
+# Ubicación del archivo de log
+log_file = /var/log/printer_connect/server.log
+
+# Rotación de logs (tamaño en MB)
+log_rotation_size = 50
+
+# Cantidad de archivos de log a mantener
+log_retention_count = 10
+
+[Monitoring]
+# Habilitar métricas Prometheus
+enable_prometheus = false
+prometheus_port = 9090
+
+[Notifications]
+# Email para notificaciones de errores (opcional)
+# admin_email = admin@example.com
+
+# SMTP configuration (si se usa email)
+# smtp_host = smtp.gmail.com
+# smtp_port = 587
+# smtp_user = your_email@gmail.com
+# smtp_password = your_password
+# smtp_use_tls = true
